@@ -18,12 +18,12 @@ def play_music():
     play_obj.wait_done()  # Wait until sound has finished playing
     print('Finished...')
 
-display = '6CM9100T78' 
+display = '6CM9100T78'
 # test if connect to monitor
 # play every 19 min
 
-monitor_info = subprocess.run(['system_profiler', 'SPDisplaysDataType'], stdout=subprocess.PIPE)
 while(True):
+    monitor_info = subprocess.run(['system_profiler', 'SPDisplaysDataType'], stdout=subprocess.PIPE)
     if display in str(monitor_info.stdout):
         print('Display is on!')
         play_music()
