@@ -1,11 +1,13 @@
 #!/bin/bash
 
+# read from config
+source /Users/qianhaoyu/Desktop/utils/bitbar_plugins/configs/weather.config
+
 MENUFONT="size=12 font=UbuntuMono-Bold"
 COLORS=("#297722" "#ffde33" "#ff9933" "#cc0033" "#660099" "#7e0023")
 
 # parameters
-WEATHER_TOKEN="670ed82cd4434825a3f45432210103"
-WEATHER_CITY="Chicago"
+
 WEATHER_FUTURE_LENGTH=3
 shopt -s nocasematch # ignore case for string comparison
 
