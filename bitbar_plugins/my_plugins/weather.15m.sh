@@ -5,8 +5,9 @@ COLORS=("#297722" "#ffde33" "#ff9933" "#cc0033" "#660099" "#7e0023")
 
 # parameters
 WEATHER_TOKEN="670ed82cd4434825a3f45432210103"
-WEATHER_CITY="Chicago" #eg. 上海
+WEATHER_CITY="Chicago"
 WEATHER_FUTURE_LENGTH=3
+shopt -s nocasematch # ignore case for string comparison
 
 WEATHER_DATA=$(curl -s "http://api.weatherapi.com/v1/forecast.json?key=${WEATHER_TOKEN}&q=${WEATHER_CITY}&days=${WEATHER_FUTURE_LENGTH}&aqi=yes")
 WEATHER_FUTURE=$(echo "${WEATHER_DATA}" | /usr/local/bin/jq '.forecast.forecastday')
@@ -47,24 +48,23 @@ function aqi_colorize {
   fi
 }
 
-shopt -s nocasematch
-
 function weather_sym {
+
   if [ "$1" ==  "Sunny" ]; then
     echo "☀️"
   elif [ "$1" ==  "Clear" ]; then
     echo "🌙"
   elif [ "$1" == "Partly cloudy" ] || [ "$1" == "Cloudy" ]; then
     echo "☁️"
-  elif ( "$1" =~ *"thunder"* ); then
+  elif ( "$1" == *"thunder"* ); then
     echo "⚡️"
-  elif [ "$1" =~ *"mist"* ] || [ "$1" =~ *"fog"* ]; then
+  elif [ "$1" == *"mist"* ] || [ "$1" == *"fog"* ]; then
     echo "💨"
-  elif ([ "$1" =~ *"rain"* ] || [ "$1" =~ *"drizzle"* ]) && [ "$1" != *"heavy"* ] ; then
+  elif ([ "$1" == *"rain"* ] || [ "$1" == *"drizzle"* ]) && [ "$1" != *"heavy"* ] ; then
     echo "🌦"
-  elif ([ "$1" =~ *"rain"* ] || [ "$1" =~ *"drizzle"* ]) && [ "$1" =~ *"heavy"* ] ; then
+  elif ([ "$1" == *"rain"* ] || [ "$1" == *"drizzle"* ]) && [ "$1" == *"heavy"* ] ; then
     echo "🌧"
-  elif [ "$1" =~ *"snow"* ] || [ "$1" =~ *"sleet"* ] ; then
+  elif [ "$1" == *"snow"* ] || [ "$1" == *"sleet"* ] ; then
     echo "❄️"
   else
     echo "$1"
@@ -76,7 +76,7 @@ COLOR="$(aqi_colorize ${AQI_RES})"
 # remote the unnecessary quotes
 WEATHER_RES_REALTIME_INFO="${WEATHER_RES_REALTIME_INFO#\"}"
 WEATHER_RES_REALTIME_INFO="${WEATHER_RES_REALTIME_INFO%\"}"
-WEATHER_RES_REALTIME_INFO_SYM="$(weather_sym ${WEATHER_RES_REALTIME_INFO})"
+WEATHER_RES_REALTIME_INFO_SYM=$(weather_sym "${WEATHER_RES_REALTIME_INFO}") # use quotes to prevent info loss
 
 echo "🌡️${WEATHER_RES_REALTIME_INFO_SYM} ${WEATHER_RES_REALTIME_TEMPERATURE}℃ 😷${AQI_RES} | color=${COLOR} ${MENUFONT}"
 echo "---"
