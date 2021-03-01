@@ -64,14 +64,60 @@ function aqi_colorize {
   fi
 }
 
+shopt -s nocasematch
+
+function weather_sym {
+  if [ "$1" ==  "Sunny" ]; then
+    echo "☀️"
+  elif [ "$1" ==  "Clear" ]; then
+    echo "🌙"
+  elif [ "$1" == "Partly cloudy" ] || [ "$1" == "Cloudy" ]; then
+    echo "☁️"
+  elif ( "$1" =~ *"thunder"* ); then
+    echo "⚡️"
+  elif [ "$1" =~ *"mist"* ] || [ "$1" =~ *"fog"* ]; then
+    echo "💨"
+  elif ([ "$1" =~ *"rain"* ] || [ "$1" =~ *"drizzle"* ]) && [ "$1" != *"heavy"* ] ; then
+    echo "🌦"
+  elif ([ "$1" =~ *"rain"* ] || [ "$1" =~ *"drizzle"* ]) && [ "$1" =~ *"heavy"* ] ; then
+    echo "🌧"
+  elif [ "$1" =~ *"snow"* ] || [ "$1" =~ *"sleet"* ] ; then
+    echo "❄️"
+  else
+    echo "$1"
+  fi
+}
+
+
+
+# function weather_sym {
+#   if [ "$1" ==  "Sunny"]; then
+#     echo "☀️"
+#   if [ "$1" ==  "Clear"]; then
+#     echo "🌙"
+#   elif [ "$1" == "Partly cloudy" ] || [ "$1" == "Cloudy" ]; then
+#     echo "☁️"
+#   elif [ "$1" == "Mist" ] || [ "$1" == "Fog" ] || [ "$1" == *"mist"* ] || [ "$1" == *"fog"* ]; then
+#     echo "💨"
+#   elif [ "$1" == *"clear"* ]; then
+#     echo "☀️"
+#   elif [ "$1" == *"clear"* ]; then
+#     echo "☀️"
+#   else
+#     echo "$1"
+#   fi
+# }
+
 COLOR="$(aqi_colorize ${AQI_RES})"
 
 # remote the unnecessary quotes
 WEATHER_RES_REALTIME_INFO="${WEATHER_RES_REALTIME_INFO#\"}"
 WEATHER_RES_REALTIME_INFO="${WEATHER_RES_REALTIME_INFO%\"}"
+WEATHER_RES_REALTIME_INFO_SYM="$(weather_sym ${WEATHER_RES_REALTIME_INFO})"
 
-echo "🌡️${WEATHER_RES_REALTIME_INFO} ${WEATHER_RES_REALTIME_TEMPERATURE}℃ 😷${AQI_RES} | color=${COLOR} ${MENUFONT}"
+echo "🌡️${WEATHER_RES_REALTIME_INFO_SYM} ${WEATHER_RES_REALTIME_TEMPERATURE}℃ 😷${AQI_RES} | color=${COLOR} ${MENUFONT}"
 echo "---"
+echo "Today: 🌡️${WEATHER_RES_REALTIME_INFO} ${WEATHER_RES_REALTIME_TEMPERATURE}℃ 😷${AQI_RES}"
 for(( i=0;i<WEATHER_FUTURE_LENGTH;i++)) do
   WEATHER_FUTURE_N=$(echo "${WEATHER_FUTURE}" | /usr/local/bin/jq ".[${i}]")
   # echo "${WEATHER_FUTURE_N}"
@@ -87,4 +133,5 @@ for(( i=0;i<WEATHER_FUTURE_LENGTH;i++)) do
   echo "${WEATHER_FUTURE_N_DATE} ${WEATHER_FUTURE_N_WEATHER}（${WEATHER_FUTURE_N_TEMPERATURE}℃）";
 done;
 # echo "AQI Detail... | href=${AQI_DETAIL_URL}"
+echo "yxq大傻芝"
 echo "Refresh... | refresh=true"
