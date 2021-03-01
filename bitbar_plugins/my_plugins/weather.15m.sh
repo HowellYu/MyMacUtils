@@ -9,12 +9,14 @@ WEATHER_CITY="Chicago"
 WEATHER_FUTURE_LENGTH=3
 shopt -s nocasematch # ignore case for string comparison
 
-WEATHER_DATA=$(curl -s "http://api.weatherapi.com/v1/forecast.json?key=${WEATHER_TOKEN}&q=${WEATHER_CITY}&days=${WEATHER_FUTURE_LENGTH}&aqi=yes")
+WEATHER_DATA=$(curl -s "http://api.weatherapi.com/v1/forecast.json?key=${WEATHER_TOKEN}&q=${WEATHER_CITY}&days=${WEATHER_FUTURE_LENGTH}&aqi=yes&alerts=yes")
 WEATHER_FUTURE=$(echo "${WEATHER_DATA}" | /usr/local/bin/jq '.forecast.forecastday')
 
 WEATHER_RES_REALTIME_INFO=$(echo "${WEATHER_DATA}" | /usr/local/bin/jq '.current.condition.text')
 WEATHER_RES_REALTIME_TEMPERATURE=$(echo "${WEATHER_DATA}" | /usr/local/bin/jq '.current.temp_c')
 AQI_DATA=$(echo "${WEATHER_DATA}" | /usr/local/bin/jq '.current.air_quality.pm2_5')
+ALERTS=$(echo "${WEATHER_DATA}" | /usr/local/bin/jq '.alerts.alert')
+
 
 # Function round(precision, number)
 round() {
@@ -95,6 +97,17 @@ for(( i=0;i<WEATHER_FUTURE_LENGTH;i++)) do
   WEATHER_FUTURE_N_WEATHER="${WEATHER_FUTURE_N_WEATHER%\"}"
   echo "${WEATHER_FUTURE_N_DATE} ${WEATHER_FUTURE_N_WEATHER}（${WEATHER_FUTURE_N_TEMPERATURE}℃）";
 done;
+
+# alerts
+
+for(( i=0;i<${#ALERTS[@]};i++)) do
+  ALERT=$(echo "${ALERTS}" | /usr/local/bin/jq ".[${i}]")
+  MESSAGE=$(echo "${ALERT}" | /usr/local/bin/jq '.headline')
+  MESSAGE="${MESSAGE#\"}"
+  MESSAGE="${MESSAGE%\"}"
+  echo "Alerts: ${MESSAGE}"
+done;
+
 # echo "AQI Detail... | href=${AQI_DETAIL_URL}"
 echo "yxq大傻芝"
 echo "Refresh... | refresh=true"
