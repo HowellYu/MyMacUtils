@@ -37,15 +37,15 @@ AQI_RES=$(expr $AQI_DATA)
 AQI_RES=${AQI_RES%.*}
 
 function aqi_colorize {
-  if [ "$1" -le 50 ]; then
+  if [ "$1" -le 12 ]; then
     echo "${COLORS[0]}"
-  elif [ "$1" -le 100 ]; then
+  elif [ "$1" -le 35 ]; then
     echo "${COLORS[1]}"
-  elif [ "$1" -le 150 ]; then
+  elif [ "$1" -le 55 ]; then
     echo "${COLORS[2]}"
-  elif [ "$1" -le 200 ]; then
+  elif [ "$1" -le 150 ]; then
     echo "${COLORS[3]}"
-  elif [ "$1" -le 300 ]; then
+  elif [ "$1" -le 250 ]; then
     echo "${COLORS[4]}"
   else
     echo "${COLORS[5]}"
