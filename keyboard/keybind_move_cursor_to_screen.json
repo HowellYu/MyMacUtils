@@ -1,0 +1,56 @@
+{
+  "description": "Move cursor to between monitors",
+  "manipulators": [
+    {
+      "description": "Left",
+      "from": {
+        "key_code": "j",
+        "modifiers": {
+          "mandatory": [
+            "control"
+          ]
+        }
+      },
+      "to": [
+        {
+          "shell_command": "/opt/anaconda3/bin/python -c 'import Quartz.CoreGraphics as CG; CG.CGWarpMouseCursorPosition((1000, 500))'"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "description": "Middle",
+      "from": {
+        "key_code": "k",
+        "modifiers": {
+          "mandatory": [
+            "control"
+          ]
+        }
+      },
+      "to": [
+        {
+          "shell_command": "/opt/anaconda3/bin/python -c 'import Quartz.CoreGraphics as CG; CG.CGWarpMouseCursorPosition((3000, 500))'"
+        }
+      ],
+      "type": "basic"
+    },
+    {
+      "description": "Right",
+      "from": {
+        "key_code": "l",
+        "modifiers": {
+          "mandatory": [
+            "control"
+          ]
+        }
+      },
+      "to": [
+        {
+          "shell_command": "/opt/anaconda3/bin/python -c 'import Quartz.CoreGraphics as CG; CG.CGWarpMouseCursorPosition((4500, 500))'"
+        }
+      ],
+      "type": "basic"
+    }
+  ]
+}
