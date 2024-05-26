@@ -29,7 +29,7 @@ if __name__ == '__main__':
         if display in str(monitor_info.stdout):
             print('Display is on!')
             play_music()
-            time.sleep(5*6) # sleep for 19 mins
+            time.sleep(5*60) # sleep for 19 mins
         else:
             print('Display is NOT on!')
-            time.sleep(6)
+            time.sleep(60)
